@@ -4,7 +4,7 @@ import SiteFooter from "../components/SiteFooter";
 import { supabase } from "../lib/supabase";
 
 // ---- Edit these. Prices are PLACEHOLDERS until you give me your real rates. ----
-const WHATSAPP = "27000000000"; // international format, no + or spaces
+const WHATSAPP = "27738037404"; // 073 803 7404 with SA country code
 const HELPER_FEE = 150; // per extra loader
 const TRUCKS = [
   {

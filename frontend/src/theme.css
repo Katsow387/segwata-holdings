@@ -1,39 +1,42 @@
-@import url("https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Figtree:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap");
 
 :root {
-  --navy-950: #081a30;
-  --navy-800: #0f2d52;
-  --blue-600: #1f5fb0;
-  --blue-400: #5b9bd9;
-  --ice-50: #f4f8fc;
-  --ice-100: #e8f0fa;
-  --amber-500: #f0a24a;
-  --green-600: #2f9e5b;
-  --red-500: #d15b5b;
-  --ink: #12243b;
-  --muted: #5d6f84;
-  --border: #dfe7f0;
-  --white: #fff;
-  --font-head: "Bricolage Grotesque", "Segoe UI", sans-serif;
-  --font-body: "Figtree", "Segoe UI", sans-serif;
+  /* Brochure Colors */
+  --navy-950: #081A30;
+  --navy-800: #0F2D52;
+  --blue-600: #1E4E8C;
+  --amber-500: #F4B326;
+  --ice-50: #F4F8FC;
+  --ice-100: #E8F0FA;
+  --green-600: #2F9E5B;
+  --red-500: #D15B5B;
+  --ink: #12243B;
+  --muted: #8BA4BF;
+  --border: #DFE7F0;
+  --white: #FFFFFF;
+  
+  --font-head: "Montserrat", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
 }
+
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; padding: 0; }
 html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
 body { font-family: var(--font-body); color: var(--ink); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
-h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; color: var(--navy-950); line-height: 1.1; letter-spacing: -0.02em; }
+h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; color: var(--navy-950); line-height: 1.1; letter-spacing: -0.02em; text-transform: uppercase; }
 p { margin: 0; }
 a { text-decoration: none; color: inherit; }
 ul { list-style: none; margin: 0; padding: 0; }
-:focus-visible { outline: 3px solid var(--blue-400); outline-offset: 2px; }
+:focus-visible { outline: 3px solid var(--amber-500); outline-offset: 2px; }
 
-.btn { display: inline-block; padding: 0.85rem 1.6rem; border-radius: 999px; font-weight: 600; font-size: 0.95rem; border: 0; cursor: pointer; font-family: var(--font-body); transition: transform .15s, background .15s; }
+/* Buttons */
+.btn { display: inline-block; padding: 0.85rem 1.6rem; border-radius: 4px; font-weight: 700; font-size: 0.95rem; border: 0; cursor: pointer; font-family: var(--font-head); text-transform: uppercase; transition: transform .15s, background .15s; }
 .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 .btn--primary { background: var(--amber-500); color: var(--navy-950); }
-.btn--primary:hover:not(:disabled) { background: #f5b567; transform: translateY(-1px); }
-.btn--ghost { border: 1.5px solid rgba(255,255,255,.6); color: var(--white); background: transparent; }
-.btn--ghost:hover { background: rgba(255,255,255,.12); }
-.btn--outline { border: 1.5px solid var(--blue-600); color: var(--blue-600); background: transparent; }
+.btn--primary:hover:not(:disabled) { background: #FFC84D; transform: translateY(-1px); }
+.btn--ghost { border: 1.5px solid var(--amber-500); color: var(--amber-500); background: transparent; }
+.btn--ghost:hover { background: rgba(244, 179, 38, 0.1); }
+.btn--outline { border: 1.5px solid var(--navy-950); color: var(--navy-950); background: transparent; }
 .btn--outline:hover { background: var(--ice-100); }
 .btn--small { padding: 0.55rem 1.15rem; font-size: 0.85rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }
