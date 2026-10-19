@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../lib/auth";
 import logo from "../assets/segwata-logo.jpg";
 
 const roleSwitcher = [
@@ -9,6 +10,8 @@ const roleSwitcher = [
 ];
 
 export default function DashboardLayout({ role, roleLabel, navItems, children }) {
+  const { session, signOut } = useAuth();
+  const navigate = useNavigate();
   return (
     <div className="dash">
       <aside className="dash__sidebar">
@@ -39,6 +42,11 @@ export default function DashboardLayout({ role, roleLabel, navItems, children })
           </div>
         </div>
 
+        {session && (
+          <button className="dash__signout" onClick={async () => { await signOut(); navigate("/login"); }}>
+            Log out
+          </button>
+        )}
         <Link to="/sgt-go" className="dash__back">
           ← Back to SGT GO home
         </Link>

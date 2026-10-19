@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
-import logo from "../assets/segwata-logo.jpg";
+import SiteHeader from "../components/SiteHeader";
+import SiteFooter from "../components/SiteFooter";
 import heroImg from "../assets/segwata-bakkie-hero.jpg";
 
 const services = [
@@ -30,44 +31,28 @@ const partners = ["Game", "Builders Warehouse", "Makro", "Walmart", "Wumdrop"];
 export default function Home() {
   return (
     <>
-      <header className="nav">
-        <div className="nav__inner">
-          <img src={logo} alt="Segwata Holdings" className="nav__logo" />
-          <nav className="nav__links">
-            <a href="#services">Services</a>
-            <Link to="/sgt-go">SGT GO</Link>
-            <a href="#about">About</a>
-            <a href="#contact">Contact</a>
-          </nav>
-          <a href="#contact" className="btn btn--primary btn--small">
-            Get a quote
-          </a>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main>
-        <section className="hero" style={{ backgroundImage: `url(${heroImg})` }}>
-          <div className="hero__scrim" />
-          <div className="hero__content">
-            <h1>
-              On time. <br />
-              On site. <br />
-              On your side.
-            </h1>
-            <p className="hero__sub">
-              Segwata Holdings moves freight for Gauteng's biggest retailers,
-              renovates the properties they operate from, and settles the
-              insurance claims when things go wrong — one reliable partner
-              for all three.
-            </p>
-            <div className="hero__actions">
-              <a href="#services" className="btn btn--primary">
-                See our services
-              </a>
-              <Link to="/sgt-go" className="btn btn--ghost">
-                Open the SGT GO app
-              </Link>
+        <section className="hero">
+          <div className="hero__top">
+            <h1>On time.<br />On site.<br />On your side.</h1>
+            <div className="hero__side">
+              <p className="hero__sub">
+                Segwata Holdings moves freight for Gauteng's biggest retailers,
+                renovates the properties they operate from, and settles the
+                insurance claims when things go wrong. One reliable partner for all three.
+              </p>
+              <div className="hero__actions">
+                <Link to="/quote" className="btn btn--primary">Get a delivery quote</Link>
+                <Link to="/sgt-go" className="btn btn--ghost">Open SGT GO</Link>
+              </div>
             </div>
+          </div>
+          <div className="hero__scene">
+            <img src={heroImg} alt="A Segwata Holdings bakkie driving above Johannesburg at dusk" className="hero__img" />
+            <span className="hero__road hero__road--far" aria-hidden="true" />
+            <span className="hero__road" aria-hidden="true" />
           </div>
         </section>
 
@@ -162,18 +147,7 @@ export default function Home() {
         </section>
       </main>
 
-      <footer id="contact" className="footer">
-        <div className="footer__inner">
-          <img src={logo} alt="Segwata Holdings" className="footer__logo" />
-          <div className="footer__details">
-            <p>Unit 29, 343 Pongola River Drive, Norkem Park, 1618</p>
-            <p>segwata@gmail.com</p>
-          </div>
-          <p className="footer__tagline">
-            Driven by Reliability. Built on Integrity.
-          </p>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }
