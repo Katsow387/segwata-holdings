@@ -1,55 +1,74 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { supabase } from "./supabase";
 
-const AuthContext = createContext({
-  session: null, profile: null, application: null, loading: false,
-  signOut: async () => {}, refreshApplication: async () => {},
-});
+export const APPLICANT_ROLES = ["merchant", "supplier", "driver"];
+const AuthCtx = createContext(null);
+export const useAuth = () => useContext(AuthCtx);
+
+/** Where should this person be right now? One place decides, so login, signup and guards all agree. */
+export function destinationFor(profile, application) {
+  if (!profile) return "/login";
+  const role = profile.role;
+  if (role === "admin") return "/sgt-go/admin";
+  if (!APPLICANT_ROLES.includes(role)) return "/sgt-go";
+  const s = application?.status;
+  if (s === "approved" || (s === "provisional" && role === "driver")) return `/sgt-go/${role}`;
+  if (!application || s === "draft" || s === "more_info_required") return "/sgt-go/apply";
+  return "/sgt-go/status"; // pending_review, rejected
+}
 
 export function AuthProvider({ children }) {
   const [session, setSession] = useState(null);
-  const [profile, setProfile] = useState(null);
-  const [application, setApplication] = useState(undefined); // undefined = still loading
-  const [loading, setLoading] = useState(Boolean(supabase));
-
-  const readApplication = useCallback(async (userId) => {
-    const { data } = await supabase.from("applications").select("*").eq("user_id", userId).maybeSingle();
-    setApplication(data ?? null);
-  }, []);
-
-  const loadProfile = useCallback(async (user) => {
-    if (!user) { setProfile(null); setApplication(null); return; }
-    const read = () => supabase.from("profiles").select("*").eq("id", user.id).single();
-    let { data } = await read();
-    const pending = localStorage.getItem("sgtgo.pendingRole");
-    if (data && !data.role_locked && pending) {
-      await supabase.rpc("choose_role", { new_role: pending });
-      localStorage.removeItem("sgtgo.pendingRole");
-      ({ data } = await read());
-    }
-    await readApplication(user.id);
-    setProfile(data);
-  }, [readApplication]);
+  const [sessionReady, setSessionReady] = useState(!supabase);
+  const [data, setData] = useState({ uid: null, profile: null, application: null });
 
   useEffect(() => {
     if (!supabase) return;
-    supabase.auth.getSession()
-      .then(({ data }) => { setSession(data.session); return loadProfile(data.session?.user); })
-      .finally(() => setLoading(false));
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
-      setSession(s);
-      setTimeout(() => loadProfile(s?.user), 0);
-    });
+    supabase.auth.getSession().then(({ data: d }) => { setSession(d.session); setSessionReady(true); });
+    const { data: sub } = supabase.auth.onAuthStateChange((_e, s) => setSession(s));
     return () => sub.subscription.unsubscribe();
-  }, [loadProfile]);
+  }, []);
 
-  const value = useMemo(() => ({
-    session, profile, application, loading,
-    signOut: async () => { await supabase?.auth.signOut(); },
-    refreshApplication: async () => { if (session) await readApplication(session.user.id); },
-  }), [session, profile, application, loading, readApplication]);
+  const uid = session?.user?.id ?? null;
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const load = useCallback(async (id) => {
+    // Google sign-up remembers the chosen role in localStorage; apply it once.
+    const pending = localStorage.getItem("sgtgo.pendingRole");
+    if (pending) {
+      localStorage.removeItem("sgtgo.pendingRole");
+      await supabase.rpc("set_my_role", { p_role: pending });
+    }
+    const { data: profile } = await supabase.from("profiles").select("id, role").eq("id", id).maybeSingle();
+    let application = null;
+    if (profile && APPLICANT_ROLES.includes(profile.role)) {
+      const res = await supabase.from("applications").select("*").eq("user_id", id).maybeSingle();
+      application = res.data ?? null;
+    }
+    setData({ uid: id, profile, application });
+  }, []);
+
+  useEffect(() => {
+    if (!supabase || !uid) return;
+    load(uid);
+  }, [uid, load]);
+
+  const refreshApplication = useCallback(async () => {
+    if (supabase && uid) await load(uid);
+  }, [uid, load]);
+
+  const signOut = useCallback(async () => {
+    if (supabase) await supabase.auth.signOut();
+    setData({ uid: null, profile: null, application: null });
+  }, []);
+
+  const loading = !sessionReady || (Boolean(uid) && data.uid !== uid);
+  const value = useMemo(
+    () => ({
+      session, loading, signOut, refreshApplication,
+      profile: uid && data.uid === uid ? data.profile : null,
+      application: uid && data.uid === uid ? data.application : null,
+    }),
+    [session, loading, data, uid, signOut, refreshApplication]
+  );
+  return <AuthCtx.Provider value={value}>{children}</AuthCtx.Provider>;
 }
-
-export const useAuth = () => useContext(AuthContext);

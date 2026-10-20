@@ -32,7 +32,7 @@ const features = [
 
 export default function Landing() {
   return (
-    <div>
+    <div className="site">
       <header className="sgtgo-land__nav">
         <div className="sgtgo-land__nav-inner">
           <div className="sgtgo-land__brand">
@@ -44,6 +44,7 @@ export default function Landing() {
           <nav className="sgtgo-land__nav-links">
             <Link to="/">Segwata Holdings</Link>
             <a href="#features">Features</a>
+            <Link to="/login" className="sgtgo-land__login">Log in</Link>
           </nav>
         </div>
       </header>
@@ -59,16 +60,17 @@ export default function Landing() {
             door by a Segwata Holdings driver.
           </p>
           <div className="sgtgo-land__roles">
-            <Link to="/sgt-go/merchant/signup" className="btn btn--primary">
+            <Link to="/signup?role=merchant" className="btn btn--primary">
               I'm a merchant
             </Link>
-            <Link to="/sgt-go/supplier/signup" className="btn btn--ghost">
+            <Link to="/signup?role=supplier" className="btn btn--ghost">
               I'm a supplier
             </Link>
-            <Link to="/sgt-go/driver/signup" className="btn btn--ghost">
+            <Link to="/signup?role=driver" className="btn btn--ghost">
               I'm a driver
             </Link>
           </div>
+          <p className="sgtgo-land__have">Already registered? <Link to="/login">Log in</Link></p>
         </div>
       </section>
 

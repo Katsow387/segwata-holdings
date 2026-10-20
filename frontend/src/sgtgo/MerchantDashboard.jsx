@@ -1,5 +1,6 @@
 import DashboardLayout from "./DashboardLayout";
 import { merchantStats, merchantOrders } from "../data/mockData";
+import { useAuth } from "../lib/auth";
 import "./sgtgo.css";
 
 const statusBadge = {
@@ -16,10 +17,12 @@ const navItems = [
 ];
 
 export default function MerchantDashboard() {
+  const { application } = useAuth();
+  const name = application?.data?.business_name || "Nomvula's Cash & Carry";
   return (
     <DashboardLayout role="merchant" roleLabel="Merchant" navItems={navItems}>
       <div id="overview" className="dash__header">
-        <h1>Welcome back, Nomvula's Cash & Carry</h1>
+        <h1>Welcome back, {name}</h1>
         <p>Here's what's moving on your account today.</p>
       </div>
 

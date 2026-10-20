@@ -29,6 +29,7 @@ export default function DashboardLayout({ role, roleLabel, navItems, children })
           ))}
         </nav>
 
+        {!session && (
         <div className="dash__switch">
           <span className="dash__switch-label">Switch view</span>
           <div className="dash__switch-links">
@@ -41,6 +42,7 @@ export default function DashboardLayout({ role, roleLabel, navItems, children })
               ))}
           </div>
         </div>
+        )}
 
         {session && (
           <button className="dash__signout" onClick={async () => { await signOut(); navigate("/login"); }}>

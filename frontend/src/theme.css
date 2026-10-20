@@ -1,42 +1,87 @@
-@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&family=Kaushan+Script&display=swap");
 
 :root {
-  /* Brochure Colors */
+  /* Brochure palette */
+  --navy-975: #050f1e;
   --navy-950: #081A30;
+  --navy-900: #0B2244;
   --navy-800: #0F2D52;
   --blue-600: #1E4E8C;
+  --blue-400: #5B9BD9;
   --amber-500: #F4B326;
+  --amber-400: #FFC84D;
   --ice-50: #F4F8FC;
   --ice-100: #E8F0FA;
   --green-600: #2F9E5B;
   --red-500: #D15B5B;
   --ink: #12243B;
-  --muted: #8BA4BF;
+  --muted: #6F89A6;
+  --soft: #c9d8e8;
   --border: #DFE7F0;
   --white: #FFFFFF;
-  
+  --line: rgba(138, 170, 220, .22);
+  --panel: rgba(255, 255, 255, .045);
+
   --font-head: "Montserrat", "Segoe UI", sans-serif;
   --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-script: "Kaushan Script", "Brush Script MT", cursive;
+  --gutter: clamp(1rem, 4vw, 1.5rem);
+  --maxw: 1180px;
 }
 
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
-body { font-family: var(--font-body); color: var(--ink); background: var(--white); line-height: 1.55; -webkit-font-smoothing: antialiased; }
-h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; color: var(--navy-950); line-height: 1.1; letter-spacing: -0.02em; text-transform: uppercase; }
+html { scroll-behavior: smooth; scroll-padding-top: 5.2rem; -webkit-text-size-adjust: 100%; }
+body { font-family: var(--font-body); color: var(--ink); background: var(--navy-950); line-height: 1.55; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+img { max-width: 100%; }
+h1, h2, h3, h4 { font-family: var(--font-head); margin: 0; color: var(--navy-950); line-height: 1.08; letter-spacing: -0.01em; text-transform: uppercase; }
 p { margin: 0; }
 a { text-decoration: none; color: inherit; }
-ul { list-style: none; margin: 0; padding: 0; }
+ul, ol { list-style: none; margin: 0; padding: 0; }
+button { font-family: inherit; }
 :focus-visible { outline: 3px solid var(--amber-500); outline-offset: 2px; }
 
-/* Buttons */
-.btn { display: inline-block; padding: 0.85rem 1.6rem; border-radius: 4px; font-weight: 700; font-size: 0.95rem; border: 0; cursor: pointer; font-family: var(--font-head); text-transform: uppercase; transition: transform .15s, background .15s; }
+/* ---------- Buttons ---------- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; padding: .85rem 1.6rem; border-radius: 6px; font-weight: 700; font-size: .92rem; letter-spacing: .02em; border: 0; cursor: pointer; font-family: var(--font-head); text-transform: uppercase; text-align: center; transition: transform .15s, background .15s; min-height: 46px; }
 .btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 .btn--primary { background: var(--amber-500); color: var(--navy-950); }
-.btn--primary:hover:not(:disabled) { background: #FFC84D; transform: translateY(-1px); }
+.btn--primary:hover:not(:disabled) { background: var(--amber-400); transform: translateY(-1px); }
 .btn--ghost { border: 1.5px solid var(--amber-500); color: var(--amber-500); background: transparent; }
-.btn--ghost:hover { background: rgba(244, 179, 38, 0.1); }
+.btn--ghost:hover { background: rgba(244, 179, 38, .12); }
 .btn--outline { border: 1.5px solid var(--navy-950); color: var(--navy-950); background: transparent; }
 .btn--outline:hover { background: var(--ice-100); }
-.btn--small { padding: 0.55rem 1.15rem; font-size: 0.85rem; }
+.btn--small { padding: .55rem 1.15rem; font-size: .82rem; min-height: 40px; }
+.btn--block { width: 100%; }
+
+/* ---------- Brochure building blocks ---------- */
+.site { background: var(--navy-950); color: var(--white); min-height: 100vh; }
+.site h1, .site h2, .site h3, .site h4 { color: var(--white); }
+.accent { color: var(--amber-500); }
+.script { font-family: var(--font-script); font-weight: 400; text-transform: none; letter-spacing: 0; }
+.wrap { max-width: var(--maxw); margin: 0 auto; padding-inline: var(--gutter); }
+
+/* "01 / TITLE" section heading */
+.sec-title { display: flex; align-items: center; gap: .9rem; }
+.sec-title__num { font-family: var(--font-head); font-weight: 800; font-size: clamp(1.8rem, 5vw, 2.6rem); color: var(--white); line-height: 1; }
+.sec-title__slash { width: 4px; height: 2.6rem; background: var(--amber-500); transform: skewX(-22deg); flex: none; }
+.sec-title h2 { font-size: clamp(1.5rem, 4.6vw, 2.5rem); font-weight: 800; }
+.eyebrow { display: block; font-size: .8rem; letter-spacing: .32em; color: var(--amber-500); text-transform: uppercase; font-weight: 600; font-family: var(--font-head); }
+
+/* glass panel like the brochure cards */
+.panel-dark { background: linear-gradient(160deg, rgba(20, 50, 96, .55), rgba(8, 26, 48, .85)); border: 1px solid var(--line); border-radius: 14px; padding: clamp(1.1rem, 3vw, 1.6rem); }
+.panel-dark h3 { display: flex; align-items: center; gap: .7rem; font-size: 1rem; letter-spacing: .04em; margin-bottom: 1rem; }
+
+/* gold-circle icon */
+.ico { width: 1.5rem; height: 1.5rem; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+.ico-circle { width: 76px; height: 76px; border-radius: 50%; border: 2px solid var(--amber-500); display: grid; place-items: center; color: var(--amber-500); flex: none; }
+.ico-circle .ico { width: 34px; height: 34px; }
+.ico-circle--sm { width: 52px; height: 52px; border-width: 1.5px; }
+.ico-circle--sm .ico { width: 24px; height: 24px; }
+
+/* gold check list */
+.checks { display: grid; gap: .6rem; }
+.checks li { display: flex; gap: .7rem; align-items: flex-start; font-size: .95rem; color: var(--soft); }
+.checks li::before { content: "✓"; flex: none; display: grid; place-items: center; width: 1.3rem; height: 1.3rem; margin-top: .1rem; border-radius: 50%; background: var(--amber-500); color: var(--navy-950); font-weight: 800; font-size: .75rem; }
+
+/* ---------- Auth / form fields (light cards on navy) ---------- */
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .btn { transition: none; } }

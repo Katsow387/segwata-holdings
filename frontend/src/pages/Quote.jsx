@@ -59,7 +59,7 @@ export default function Quote() {
   };
 
   return (
-    <>
+    <div className="site">
       <SiteHeader />
       <main className="quote">
         <div className="quote__intro">
@@ -129,6 +129,6 @@ export default function Quote() {
         </div>
       </main>
       <SiteFooter />
-    </>
+    </div>
   );
 }

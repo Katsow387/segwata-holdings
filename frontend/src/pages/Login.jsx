@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../lib/auth";
 import logo from "../assets/segwata-logo.jpg";
 import GoogleIcon from "../components/GoogleIcon";
 import { supabase } from "../lib/supabase";
@@ -9,6 +10,8 @@ export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
+  const { session, loading } = useAuth();
+  if (supabase && !loading && session) return <Navigate to="/sgt-go/continue" replace />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,19 +19,18 @@ export default function Login() {
     if (!supabase) return navigate("/sgt-go"); // demo mode
     const { email, password } = Object.fromEntries(new FormData(e.currentTarget));
     setBusy(true);
-    const { data, error: err } = await supabase.auth.signInWithPassword({ email, password });
+    const { error: err } = await supabase.auth.signInWithPassword({ email, password });
     if (err) {
       setBusy(false);
       return setError(err.message === "Invalid login credentials" ? "Wrong email or password. Check both and try again." : err.message);
     }
-    const { data: profile } = await supabase.from("profiles").select("role").eq("id", data.user.id).single();
-    navigate(`/sgt-go/${profile?.role ?? "merchant"}`);
+    navigate("/sgt-go/continue"); // sends each person to their dashboard, application form or status page
   };
 
   const handleGoogle = async () => {
     setError("");
     if (!supabase) return setError("Google log in needs Supabase. Add your keys to the .env file.");
-    const redirectTo = `${window.location.origin}${import.meta.env.BASE_URL}login`;
+    const redirectTo = `${window.location.origin}${import.meta.env.BASE_URL}sgt-go/continue`;
     const { error: err } = await supabase.auth.signInWithOAuth({ provider: "google", options: { redirectTo } });
     if (err) setError(err.message);
   };
@@ -53,9 +55,7 @@ export default function Login() {
         </form>
 
         <div className="auth-card__footer">
-          <p>
-            New here? <Link to="/sgt-go/merchant/signup">Merchant</Link> · <Link to="/sgt-go/supplier/signup">Supplier</Link> · <Link to="/sgt-go/driver/signup">Driver</Link>
-          </p>
+          <p>New here? <Link to="/signup">Create an account</Link></p>
           <Link to="/" className="auth-card__back">← Back to Segwata Holdings</Link>
         </div>
       </div>

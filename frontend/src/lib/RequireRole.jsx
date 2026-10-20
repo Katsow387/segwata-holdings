@@ -1,23 +1,37 @@
 import { Navigate } from "react-router-dom";
-import { useAuth } from "./auth";
-import { supabaseReady } from "./supabase";
+import { destinationFor, useAuth } from "./auth";
+import { supabase } from "./supabase";
 
-const Wait = () => <p style={{ padding: "3rem", textAlign: "center" }}>Loading…</p>;
-const APPROVED = ["approved", "provisional"];
+function Splash() {
+  return (
+    <div className="auth-page"><div className="auth-card"><p className="auth-card__intro" style={{ margin: 0 }}>Loading…</p></div></div>
+  );
+}
 
-export default function RequireRole({ role, needsApproval = false, children }) {
+/**
+ * <RequireRole role="merchant">          dashboard: only once the application is approved
+ * <RequireRole role="merchant" applicant> the apply / status pages: any application state
+ * <RequireRole role="admin">             admins only
+ */
+export default function RequireRole({ role, applicant = false, children }) {
   const { session, profile, application, loading } = useAuth();
-  if (!supabaseReady) return children; // demo mode until Supabase keys are added
-  if (loading) return <Wait />;
+  if (!supabase) return children; // demo mode: no Supabase keys yet
+  if (loading) return <Splash />;
   if (!session) return <Navigate to="/login" replace />;
-  if (!profile || application === undefined) return <Wait />;
-  if (profile.role !== role && profile.role !== "admin") {
-    return <Navigate to={`/sgt-go/${profile.role}`} replace />;
+  if (applicant) {
+    if (!["merchant", "supplier", "driver"].includes(profile?.role)) return <Navigate to={destinationFor(profile, application)} replace />;
+    return children;
   }
-  if (needsApproval && profile.role !== "admin" && !APPROVED.includes(application?.status)) {
-    const s = application?.status;
-    const to = s === "pending_review" || s === "rejected" ? `/sgt-go/${role}/status` : `/sgt-go/${role}/apply`;
-    return <Navigate to={to} replace />;
+  if (profile?.role !== role || destinationFor(profile, application) !== `/sgt-go/${role}`) {
+    return <Navigate to={destinationFor(profile, application)} replace />;
   }
   return children;
+}
+
+/** /sgt-go/continue: sends the person wherever they should be. */
+export function Continue() {
+  const { session, profile, application, loading } = useAuth();
+  if (loading) return <Splash />;
+  if (!session) return <Navigate to="/login" replace />;
+  return <Navigate to={destinationFor(profile, application)} replace />;
 }

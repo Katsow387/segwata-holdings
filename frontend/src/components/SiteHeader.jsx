@@ -1,20 +1,32 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../assets/segwata-logo.jpg";
+import Icon from "./Icon";
+
+const base = import.meta.env.BASE_URL;
 
 export default function SiteHeader() {
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
   return (
-    <header style={{ position: "sticky", top: 0, zIndex: 20, background: "rgba(8, 26, 48, 0.98)", backdropFilter: "blur(8px)", borderBottom: "1px solid rgba(255,255,255,0.1)" }}>
-      <div style={{ maxWidth: "1180px", margin: "0 auto", padding: "1rem 1.5rem", display: "flex", alignItems: "center", gap: "2rem" }}>
-        <Link to="/">
-          <img src={logo} alt="Segwata Holdings" style={{ height: "45px", width: "auto", objectFit: "contain", display: "block", background: "#fff", padding: "4px 8px", borderRadius: "4px" }} />
+    <header className="hdr">
+      <div className="hdr__inner">
+        <Link to="/" onClick={close} className="hdr__logo-link">
+          <img src={logo} alt="Segwata Holdings" className="hdr__logo" />
         </Link>
-        <nav style={{ display: "flex", gap: "1.8rem", marginLeft: "auto", fontWeight: 600, fontSize: ".9rem", color: "var(--white)", textTransform: "uppercase" }} aria-label="Main">
-          <a href={`${import.meta.env.BASE_URL}#services`} style={{ transition: "color 0.2s" }} onMouseOver={(e) => e.target.style.color = "var(--amber-500)"} onMouseOut={(e) => e.target.style.color = "var(--white)"}>Services</a>
-          <Link to="/sgt-go" style={{ transition: "color 0.2s" }} onMouseOver={(e) => e.target.style.color = "var(--amber-500)"} onMouseOut={(e) => e.target.style.color = "var(--white)"}>SGT GO</Link>
-          <a href={`${import.meta.env.BASE_URL}#about`} style={{ transition: "color 0.2s" }} onMouseOver={(e) => e.target.style.color = "var(--amber-500)"} onMouseOut={(e) => e.target.style.color = "var(--white)"}>About</a>
-          <a href="#contact" style={{ transition: "color 0.2s" }} onMouseOver={(e) => e.target.style.color = "var(--amber-500)"} onMouseOut={(e) => e.target.style.color = "var(--white)"}>Contact</a>
+
+        <nav className={"hdr__nav" + (open ? " is-open" : "")} aria-label="Main">
+          <a href={`${base}#services`} onClick={close}>Services</a>
+          <Link to="/sgt-go" onClick={close}>SGT GO</Link>
+          <a href={`${base}#about`} onClick={close}>About</a>
+          <a href={`${base}#contact`} onClick={close}>Contact</a>
+          <Link to="/quote" onClick={close} className="btn btn--primary btn--small hdr__cta-in">Get a quote</Link>
         </nav>
-        <Link to="/quote" className="btn btn--primary btn--small">Get a quote</Link>
+
+        <Link to="/quote" className="btn btn--primary btn--small hdr__cta">Get a quote</Link>
+        <button type="button" className="hdr__burger" aria-label={open ? "Close menu" : "Open menu"} aria-expanded={open} onClick={() => setOpen(!open)}>
+          <Icon name={open ? "close" : "menu"} />
+        </button>
       </div>
     </header>
   );

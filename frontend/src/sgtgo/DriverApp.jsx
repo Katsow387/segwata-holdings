@@ -1,5 +1,6 @@
 import DashboardLayout from "./DashboardLayout";
 import { driverStats, driverJobs } from "../data/mockData";
+import { useAuth } from "../lib/auth";
 import "./sgtgo.css";
 
 const statusBadge = {
@@ -14,10 +15,12 @@ const navItems = [
 ];
 
 export default function DriverApp() {
+  const { application } = useAuth();
+  const first = (application?.data?.full_name || "Sipho").split(" ")[0];
   return (
     <DashboardLayout role="driver" roleLabel="Driver" navItems={navItems}>
       <div id="overview" className="dash__header">
-        <h1>Hey Sipho, ready to drive?</h1>
+        <h1>Hey {first}, ready to drive?</h1>
         <p>Here's today's earnings and your current jobs.</p>
       </div>
 

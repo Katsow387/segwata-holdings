@@ -1,5 +1,6 @@
 import DashboardLayout from "./DashboardLayout";
 import { supplierStats, supplierOrders } from "../data/mockData";
+import { useAuth } from "../lib/auth";
 import "./sgtgo.css";
 
 const statusBadge = {
@@ -16,10 +17,12 @@ const navItems = [
 ];
 
 export default function SupplierDashboard() {
+  const { application } = useAuth();
+  const name = application?.data?.company_name || "Tiger Brands";
   return (
     <DashboardLayout role="supplier" roleLabel="Supplier" navItems={navItems}>
       <div id="overview" className="dash__header">
-        <h1>Welcome back, Tiger Brands</h1>
+        <h1>Welcome back, {name}</h1>
         <p>New orders are waiting on your response.</p>
       </div>
 
